@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,7 +27,7 @@ public class ProjectController {
         if (errorMap != null) {
             return errorMap;
         }
-        Project project1 = projectService.saveOrUpdate(project);
+//        Project project1 = projectService.saveOrUpdate(project);
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 
