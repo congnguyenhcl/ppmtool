@@ -27,11 +27,11 @@ public class Project {
     private String description;
     @JsonFormat(pattern = "yyyy-mm-dd", timezone = JsonFormat.DEFAULT_TIMEZONE)
     @FutureOrPresent(message = "Start date cannot be in the past")
-    @NotEmpty
+
     private Date start_date;
     @JsonFormat(pattern = "yyyy-mm-dd", timezone = JsonFormat.DEFAULT_TIMEZONE)
     @Future(message = "End date must be at least tomorrow")
-    @NotEmpty
+
     private Date end_date;
     @JsonFormat(pattern = "yyyy-mm-dd", timezone = JsonFormat.DEFAULT_TIMEZONE)
     @Column(updatable = false)
