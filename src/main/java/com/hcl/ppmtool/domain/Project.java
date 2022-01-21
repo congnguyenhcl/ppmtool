@@ -2,6 +2,7 @@ package com.hcl.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -20,8 +21,10 @@ public class Project {
     @NotBlank(message = "Project description is required")
     private String description;
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @FutureOrPresent(message = "Start date cannot be in the past")
     private Date start_date;
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @FutureOrPresent(message = "End date cannot be in the past")
     private Date end_date;
     @JsonFormat(pattern = "yyyy-mm-dd")
     @Column(updatable = false)
