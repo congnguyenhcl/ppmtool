@@ -1,12 +1,12 @@
 package com.hcl.ppmtool.services;
 
+import com.hcl.ppmtool.domain.Backlog;
 import com.hcl.ppmtool.domain.Project;
 import com.hcl.ppmtool.exceptions.ProjectIdException;
+import com.hcl.ppmtool.repositories.BacklogRepository;
 import com.hcl.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 @Service
 public class ProjectService {
@@ -14,10 +14,26 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private BacklogRepository backlogRepository;
+
     public Project saveOrUpdateProject(Project project){
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            if(project.getId()==null){
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }
+
+            if(project.getId()!=null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+
             return projectRepository.save(project);
+
         }catch (Exception e){
             throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
         }
@@ -27,7 +43,7 @@ public class ProjectService {
 
     public Project findProjectByIdentifier(String projectId){
 
-        Project project = projectRepository.findProjectByProjectIdentifier(projectId.toUpperCase());
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
         if(project == null){
             throw new ProjectIdException("Project ID '"+projectId+"' does not exist");
@@ -44,7 +60,7 @@ public class ProjectService {
 
 
     public void deleteProjectByIdentifier(String projectid){
-        Project project = projectRepository.findProjectByProjectIdentifier(projectid.toUpperCase());
+        Project project = projectRepository.findByProjectIdentifier(projectid.toUpperCase());
 
         if(project == null){
             throw  new  ProjectIdException("Cannot Project with ID '"+projectid+"'. This project does not exist");
